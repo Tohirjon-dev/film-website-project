@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Users {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  username      String   
+  email         String   @unique @db.VarChar(100)
+  password_hash String   @db.VarChar(255)
+  role          Roles    @default(user)
+  avatar_url    String?  @db.VarChar(255)
+  created_at    DateTime @default(now()) @db.Timestamp
+  subscriptions UserSubscriptions[]
+  favorites     Favorites[]
+  reviews       Reviews[]
+  watch_history WatchHistory[]
+  movies_created Movies[] @relation("MoviesCreated")
+  @@map("users")
+}
+
+enum Roles {
+  user
+  admin
+  superadmin
+}
+
+model SubscriptionPlans {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  name          String   @db.VarChar(50) @unique
+  price         Decimal  @db.Decimal(10, 2)
+  duration_days Int
+  features      Json
+  is_active     Boolean  @default(true)
+  user_subscriptions UserSubscriptions[]
+  @@map("subscriptionplans")
+}
+
+model UserSubscriptions {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  user_id        Int
+  plan_id        Int
+  start_date     DateTime  @default(now()) @db.Timestamp
+  end_date       DateTime?
+  status         Status    @default(pending_payment)
+  payment Payments[]
+  auto_renew     Boolean   @default(false)
+  created_at     DateTime  @default(now()) @db.Timestamp
+  user           Users     @relation(fields: [user_id], references: [id])
+  plan           SubscriptionPlans @relation(fields: [plan_id], references: [id])
+  @@map("usersubscriptions")
+}
+
+enum Status {
+  active
+  expired
+  canceled
+  pending_payment
+}
+
+model Payments {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  user_subscription_id   Int
+  amount                Decimal   @db.Decimal(10, 2)
+  payment_method        PaymentMethod
+  payment_details       Json
+  status                PaymentStatus
+  external_transaction_id String  @db.VarChar(100)
+  created_at           DateTime  @default(now()) @db.Timestamp
+  user_subscription     UserSubscriptions @relation(fields: [user_subscription_id], references: [id])
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  card
+  paypal
+  bank_transfer
+  crypto
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+  refunded
+}
+
+model Categories {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  name        String   @db.VarChar(50)
+  slug        String   @unique @db.VarChar(50)
+  description String?  @db.Text
+  movies      MovieCategories[]
+  @@map("categories")
+}
+
+model Movies {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  title           String            @db.VarChar(100)
+  slug            String            @unique @db.VarChar(100)
+  description     String?           @db.Text
+  release_year    Int
+  duration_minutes Int
+  poster_url      String?           @db.VarChar(255)
+  rating          Decimal?          @db.Decimal(3, 1)
+  subscription_type MovieSubscriptionType @default(free)
+  view_count      Int               @default(0)
+  created_by     Int
+  created_at      DateTime          @default(now()) @db.Timestamp
+  categories      MovieCategories[]
+  files           MovieFiles[]
+  favorites       Favorites[]
+  reviews         Reviews[]
+  watch_history   WatchHistory[]
+  created_by_user Users            @relation("MoviesCreated", fields: [created_by], references: [id])
+  @@map("movies")
+}
+
+enum MovieSubscriptionType {
+  free
+  premium
+}
+
+model MovieCategories {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  movie_id   Int
+  category_id Int
+  movie      Movies  @relation(fields: [movie_id], references: [id])
+  category   Categories @relation(fields: [category_id], references: [id])
+  @@map("moviecategories")
+}
+
+model MovieFiles {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  movie_id   Int
+  file_url   String            @db.VarChar(255)
+  quality    MovieFileQuality
+  language   String            @default("uz") @db.VarChar(20)
+  movie      Movies            @relation(fields: [movie_id], references: [id])
+  @@map("moviefiles")
+}
+
+enum MovieFileQuality {
+  p240
+  p360
+  p480
+  p720
+  p1080
+  K4
+}
+
+model Favorites {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  user_id   Int
+  movie_id  Int
+  created_at DateTime @default(now()) @db.Timestamp
+  user      Users    @relation(fields: [user_id], references: [id])
+  movie     Movies   @relation(fields: [movie_id], references: [id])
+  @@map("favorites")
+}
+
+model Reviews {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  user_id    Int
+  movie_id   Int
+  rating     Int      @db.Integer
+  comment    String?  @db.Text
+  created_at DateTime @default(now()) @db.Timestamp
+  user       Users    @relation(fields: [user_id], references: [id])
+  movie      Movies   @relation(fields: [movie_id], references: [id])
+  @@map("reviews")
+}
+
+
+model WatchHistory {
+  id            Int   @id @default(autoincrement()) @db.Integer
+  user_id          Int
+  movie_id        Int
+  watched_duration Int
+  watched_percentage Decimal @db.Decimal(5, 2)
+  last_watched     DateTime @default(now()) @db.Timestamp
+  user             Users    @relation(fields: [user_id], references: [id])
+  movie            Movies   @relation(fields: [movie_id], references: [id])
+  @@map("watchhistory")
+}
