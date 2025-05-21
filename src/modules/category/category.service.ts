@@ -4,12 +4,10 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UseGuards,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { IS_ISO31661_ALPHA_2 } from 'class-validator';
 
 @Injectable()
 export class CategoryService {

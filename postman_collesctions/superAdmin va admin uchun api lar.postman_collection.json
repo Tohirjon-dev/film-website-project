@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "a9d3c4f8-ca3c-4a3f-b9b6-186155bda3a8",
+		"name": "superAdmin va dmin uchun api lar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40691173"
+	},
+	"item": [
+		{
+			"name": "super-admin login jarayoni",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"muqimovtohirjon79@gmail.com\",\r\n    \"password\":\"tohirjon06\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userni id si orqali admin qilish",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/super-admin/create-admin/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"super-admin",
+						"create-admin",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Barcha userlarni olish",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "barcha adminlarni olish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/super-admin/admins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"super-admin",
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kategoriya yaratish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Action kinolaer\",\r\n    \"slug\":\"action\",\r\n    \"description\":\"Sarguzasht filmlar\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/category/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"category",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "katyegoriyani update qilish",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"new_name\":\"Komedik filmlar (yangi)\",\r\n    \"new_description\":\"Kulguli filmlar\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/category/update/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"category",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "categoryni o'chirish",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/category/delete/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"category",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kino qo'shish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Test\",\r\n    \"slug\":\"test\",\r\n    \"description\":\"Komediya film\",\r\n    \"release_year\":2025,\r\n    \"duration_minutes\":116,\r\n    \"categories\":[2]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filmni o'chirib yuborish",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/movie/delete/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"delete",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obuna turini yaratish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Standard\",\r\n  \"price\": \"9.99\",\r\n  \"duration_days\": 30,\r\n  \"features\": \"{\\\"storage\\\":\\\"10GB\\\",\\\"support\\\":false,\\\"users\\\":1}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/subscription-plans/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"subscription-plans",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kino videosini yuklash",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": "postman-cloud:///1f0339a4-70c6-4460-b472-ece743c07916"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie-files/2/upload-video",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie-files",
+						"2",
+						"upload-video"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kino posterini yuklash",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/USER/Desktop/photo_2024-11-30_10-17-54.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie-files/2/upload-poster",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie-files",
+						"2",
+						"upload-poster"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

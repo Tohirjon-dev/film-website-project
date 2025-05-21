@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
@@ -10,6 +11,8 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { userPayload } from 'src/common/interfaces/request.user.interface';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import * as fs from 'fs';
+import * as path from 'path';
 @Injectable()
 export class UserService {
   constructor(
@@ -62,6 +65,7 @@ export class UserService {
         id: true,
         username: true,
         email: true,
+        avatar_url: true,
         created_at: true,
       },
     });
@@ -76,4 +80,34 @@ export class UserService {
       message: 'Parol muvafaqiyatli yangilandi',
     };
   }
+  async updateAvatarWithCleanup(userId: number, filename: string) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: { avatar_url: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Foydalanuvchi topilmadi');
+    }
+
+    if (user.avatar_url) {
+      const oldPath = path.join(__dirname, '..', '..', user.avatar_url);
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+    }
+
+    const avatarUrl = `/uploads/avatars/${filename}`;
+
+    await this.prisma.users.update({
+      where: { id: userId },
+      data: { avatar_url: avatarUrl },
+    });
+
+    return {
+      message: 'Avatar muvaffaqiyatli yangilandi',
+      avatarUrl,
+    };
+  }
+
 }

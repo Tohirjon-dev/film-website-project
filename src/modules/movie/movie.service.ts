@@ -1,7 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userPayload } from 'src/common/interfaces/request.user.interface';
+import { Prisma } from '@prisma/client';
+import { Request } from 'express';
 
 @Injectable()
 export class MovieService {
@@ -96,5 +103,117 @@ export class MovieService {
     return {
       message: "Film o'chirib yuborildi",
     };
+  }
+  async watchMovie(userId: number, movieId: number, req: Request) {
+    return this.prisma.$transaction(async (tx) => {
+      const subscription = await tx.userSubscriptions.findFirst({
+        where: {
+          user_id: userId,
+          status: 'active',
+          end_date: {
+            gte: new Date(),
+          },
+        },
+      });
+
+      if (!subscription) {
+        throw new ForbiddenException('Sizda faol obuna mavjud emas.');
+      }
+
+      const movie = await tx.movies.findUnique({
+        where: { id: movieId },
+      });
+
+      if (!movie) {
+        throw new NotFoundException('Film topilmadi.');
+      }
+
+      const file = await tx.movieFiles.findFirst({
+        where: { movie_id: movieId },
+      });
+
+      if (!file) {
+        return {
+          message: 'Film tez orada yuklanadi.',
+          available: false,
+        };
+      }
+      const existingHistory = await tx.watchHistory.findFirst({
+        where: {
+          user_id: userId,
+          movie_id: movieId,
+        },
+      });
+
+      if (!existingHistory) {
+        await tx.watchHistory.create({
+          data: {
+            user_id: userId,
+            movie_id: movieId,
+            watched_duration: 0,
+            watched_percentage: new Prisma.Decimal(0),
+          },
+        });
+      }
+      await tx.movies.update({
+        where: { id: movieId },
+        data: {
+          view_count: {
+            increment: 1,
+          },
+        },
+      });
+
+      return {
+        message: 'Tomosha qilish uchun linkni bosing',
+        available: true,
+        file_url: `/stream${file.file_url.replace(/^\/uploads/, '')}`,
+      };
+    });
+  }
+  async downloadMovie(userId: number, movieId: number) {
+    return this.prisma.$transaction(async (tx) => {
+      const subscription = await tx.userSubscriptions.findFirst({
+        where: {
+          user_id: userId,
+          status: 'active',
+          end_date: {
+            gte: new Date(),
+          },
+        },
+      });
+
+      if (!subscription) {
+        throw new ForbiddenException('Sizda faol obuna mavjud emas.');
+      }
+
+      const movie = await tx.movies.findUnique({
+        where: { id: movieId },
+      });
+
+      if (!movie) {
+        throw new NotFoundException('Film topilmadi.');
+      }
+
+      const file = await tx.movieFiles.findFirst({
+        where: { movie_id: movieId },
+      });
+
+      if (!file) {
+        return {
+          message: 'Film tez orada yuklanadi.',
+          available: false,
+        };
+      }
+
+      const fileUrl = `${file.file_url}`;
+
+      return {
+        message:
+          'Yuklab olish uchun linkni bosing (brauzerda qidiruv bersangiz yuklab oladi)',
+        available: true,
+        file_url: fileUrl,
+      };
+    });
   }
 }

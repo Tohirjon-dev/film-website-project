@@ -20,9 +20,9 @@ import { FavoritesModule } from './modules/favorites/favorites.module';
 import { UserSubscriptionModule } from './modules/user-subscription/user-subscription.module';
 import { MovieFilesModule } from './modules/movie-files/movie-files.module';
 import { MovieCategoriesModule } from './modules/movie-categories/movie-categories.module';
-import { MulterModule } from '@nestjs/platform-express';
-import { extname } from 'path';
-import { diskStorage } from 'multer';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { StreamModule } from './modules/stream/stream.module';
 @Module({
   imports: [
     PrismaModule,
@@ -38,6 +38,7 @@ import { diskStorage } from 'multer';
     UserSubscriptionModule,
     MovieFilesModule,
     MovieCategoriesModule,
+    StreamModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: AllConfig,
@@ -51,15 +52,12 @@ import { diskStorage } from 'multer';
       },
       inject: [ConfigService],
     }),
-    MulterModule.register({
-      storage: diskStorage({
-        destination: './src/films',
-        filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-        },
-      }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+      serveStaticOptions: {
+        index: false,
+      },
     }),
   ],
   controllers: [AppController],

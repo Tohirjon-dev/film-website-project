@@ -8,6 +8,9 @@ import {
   Delete,
   Res,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterDto } from './dto/register.dto';
@@ -17,7 +20,9 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { userPayload } from 'src/common/interfaces/request.user.interface';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import * as path from 'path';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -48,5 +53,46 @@ export class UserController {
     @CurrentUser() user: userPayload,
   ) {
     return await this.userService.updatePassword(user, body);
+  }
+  @UseGuards(AuthGuard)
+  @Post('upload-avatar')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/avatars',
+        filename: (req, file, cb) => {
+          const userId = req.user?.id || 'unknown';
+          const ext = path.extname(file.originalname);
+          const filename = `${userId}-avatar${ext}`;
+          cb(null, filename);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+          return cb(
+            new BadRequestException('Faqat JPG, JPEG va PNG fayllar'),
+            false,
+          );
+        }
+        cb(null, true);
+      },
+    }),
+  )
+  async uploadAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: userPayload,
+  ) {
+    return this.userService.updateAvatarWithCleanup(user.id, file.filename);
+  }
+  @UseGuards(AuthGuard)
+  @Get('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('AuthToken', {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+    return {
+      message: 'Tizimdan chiqdingiz',
+    };
   }
 }

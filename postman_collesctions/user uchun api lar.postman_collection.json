@@ -1,0 +1,482 @@
+{
+	"info": {
+		"_postman_id": "bec24222-df9d-4c32-9cd1-f00f0750bea6",
+		"name": "user uchun api lar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40691173"
+	},
+	"item": [
+		{
+			"name": "user register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"Zayniddin\",\r\n    \"email\":\"example@gmail.com\",\r\n    \"password\":\"Hello\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login qilish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"example@gmail.com\",\r\n    \"password\":\"Hello\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profil malumotlari",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/user/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "parolni o'zgartirish",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"new_password\":\"No password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/user/update-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"update-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "barcha kategoriyalarni olish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/category/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"category",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kategoriya qidirish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/category/search?slug=act",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"category",
+						"search"
+					],
+					"query": [
+						{
+							"key": "slug",
+							"value": "act"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Barcha filmlarni olish",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Interstellar\",\r\n    \"slug\":\"interstellar\",\r\n    \"description\":\"Ajoyib sarguazasht film\",\r\n    \"release_year\":2014,\r\n    \"duration_minutes\":186,\r\n    \"categories\":[1]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eng mashxur filmalrni olish",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Interstellar\",\r\n    \"slug\":\"interstellar\",\r\n    \"description\":\"Ajoyib sarguazasht film\",\r\n    \"release_year\":2014,\r\n    \"duration_minutes\":186,\r\n    \"categories\":[1]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie/top",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"top"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "film qidirish",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Interstellar\",\r\n    \"slug\":\"interstellar\",\r\n    \"description\":\"Ajoyib sarguazasht film\",\r\n    \"release_year\":2014,\r\n    \"duration_minutes\":186,\r\n    \"categories\":[1]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/movie/search?title=inter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "inter"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obunalarimni korish",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Obuna tariflarini ko'rish",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "obuna bolish va tolov qilish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"plan_id\":1\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/user-subscription/subscription",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user-subscription",
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "avatar rasmini qoyish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/USER/Pictures/Screenshots/Снимок экрана 2025-04-26 103505.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/user/upload-avatar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"upload-avatar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kinoni sevimlilarga qoshish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"example@gmail.com\",\r\n    \"password\":\"Hello\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/favorites/add/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favorites",
+						"add",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sevimlilar royxatini olish",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "sevimlilar royxatidan chiqarib yuborish",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favorites/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favorites",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filmni tomosha qilish(stream orqali)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/movie/2/watch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"movie",
+						"2",
+						"watch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filmni yuklab olish",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "sharx yozish yoki yangilash",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\":\"Juda yaxshi film\",\r\n    \"rating\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/review/create/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"review",
+						"create",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sharxni o'chirish",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\":\"Juda yaxshi film\",\r\n    \"rating\":10\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/review/delete/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"review",
+						"delete",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tizimdan chiqish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/user/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
